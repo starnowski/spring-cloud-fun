@@ -36,17 +36,13 @@ class GatewayControllerTest extends Specification {
 
     def "should forward request to wiremock server and pass through response from wiremock"() {
         given:
-            stubFor(
-                    stubFor(get(urlEqualTo("/test.json")).willReturn(
-                        aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                [
-                                    { "id": 1, "userId": 1, "title": "my todo" },
-                                ]
-                                """)
-                    )
-                )
+            stubFor(get(urlEqualTo("/test.json")).willReturn(
+                    aResponse()
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("""
+                                    { "id": 1, "userId": 1, "title": "my todo" }
+                                    """)
+            )
             )
 
         when:
@@ -54,8 +50,8 @@ class GatewayControllerTest extends Specification {
 
         then:
             result.getBody().id() == 1
-            result.getBody().id() == 1
-            result.getBody().id() == "my todo"
+            result.getBody().userId() == 1
+            result.getBody().title() == "my todo"
     }
 
 
