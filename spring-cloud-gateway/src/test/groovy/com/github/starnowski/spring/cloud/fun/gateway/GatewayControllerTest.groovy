@@ -13,8 +13,9 @@ import org.springframework.core.env.Environment
 import spock.lang.Specification
 
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import static com.github.tomakehurst.wiremock.client.WireMock.get
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import static com.github.tomakehurst.wiremock.client.WireMock.get
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 
 //@SpringBootTest
 //@EnableWireMock(
@@ -35,14 +36,18 @@ class GatewayControllerTest extends Specification {
 
     def "should forward request to wiremock server and pass through response from wiremock"() {
         given:
-            wiremock.stubFor(stubFor(get("/test.json").willReturn(aResponse()
-                    .withHeader("Content-Type", "application/json")
-                    .withBody("""
-                            [
-                                { "id": 1, "userId": 1, "title": "my todo" },
-                            ]
-                            """)
-            )))
+            stubFor(
+                    stubFor(get(urlEqualTo("/test.json")).willReturn(
+                        aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                [
+                                    { "id": 1, "userId": 1, "title": "my todo" },
+                                ]
+                                """)
+                    )
+                )
+            )
 
         when:
             def result = testRestTemplate.getForEntity("/test", User)
