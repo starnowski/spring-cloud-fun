@@ -11,6 +11,9 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'spring-cloud-gateway/**'
+      - '.github/workflows/spring-cloud-gateway.yml'
   pull_request:
     branches: [ "main" ]
 
