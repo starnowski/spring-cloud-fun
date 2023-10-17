@@ -54,5 +54,24 @@ class GatewayControllerTest extends Specification {
             result.getBody().title() == "my todo"
     }
 
+    def "should return fall back and return dummy user when wiremock returns 400 response"() {
+        given:
+            stubFor(get(urlEqualTo("/service1")).willReturn(
+                    aResponse()
+                    .withStatus(400)
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("""
+                                        { "message": "invalid user" }
+                                        """)
+            )
+            )
 
+        when:
+            def result = testRestTemplate.getForEntity("/test-with-circuit-breaker", User)
+
+        then:
+            result.getBody().id() == -1
+            result.getBody().userId() == -1
+            result.getBody().title() == "Dummy user"
+    }
 }

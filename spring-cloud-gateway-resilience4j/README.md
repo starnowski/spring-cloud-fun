@@ -16,3 +16,5 @@ https://www.baeldung.com/introduction-to-wiremock
 
 https://resilience4j.readme.io/docs/circuitbreaker
 
+https://softwareskill.pl/circuit-breaker-pattern
+
